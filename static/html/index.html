@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="style.css"/>
+<body>
+
+<h2 class="w3-center">Manual Slideshow</h2>
+
+<div class="w3-content w3-display-container">
+  <div class="mySlides">
+      <div class='component'>
+          <div class="banner">Quay So Trung Thuong</div>
+          <button class="btnstart" onclick="plusDivs(1)">Bat Dau</button>
+      </div>
+      
+    </div>
+  <div class="mySlides">
+      <div class="component">
+          <div class="blocknumber">
+            <table class="tablecontent" >
+              <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+              </tr>
+              <tr>
+                  <td>5</td>
+                  <td>6</td>
+                  <td>7</td>
+                  <td>8</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                  </tr>
+                  <tr>
+                      <td>13</td>
+                      <td>14</td>
+                      <td>15</td>
+                      <td>16</td>
+                    </tr>
+            </table>
+          </div>
+          <div class="ticket">
+            <div class="title">cac so da chon</div>
+            <div id="result" class="number"></div>
+          </div>
+          <button class="" onclick="plusDivs(1)">Mua Ve</button>
+      </div>
+    </div>
+  <div class="mySlides">
+      <div class="component">
+        <div class="">
+          <button onclick="randomResult()">Quay So</button>
+            <div>Ket Qua</div>
+            <div class="ticket">
+                <div class="title">ve cua ban</div>
+                <div id="guestResult" class="number"></div>
+            </div>
+            <div class="ticket">
+                <div class="title">ket qua</div>
+                <div id="finalResult" class="number"></div>
+            </div>            
+            <div class="prize"></div>
+            <button class="" onclick="plusDivs(1)">&#10095;</button>
+        </div>
+          
+      </div>
+    </div>
+
+
+</div>
+
+<script>
+var slideIndex = 1;
+var numberElement= document.getElementsByTagName("td");
+var selectNumber= [];
+var isCheat=false;
+var listResult=[];
+var cheatResult=[];
+showDivs(slideIndex);
+addEventToTable();
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length}
+  for (i = 0; i < x.length; i++) {
+     x[i].style.display = "none";  
+  }
+  x[slideIndex-1].style.display = "block";  
+  if(slideIndex == 3){
+    showSelectNumber("guestResult",selectNumber);
+    
+  }
+}
+function addEventToTable(){
+  for(let i=0;i < numberElement.length;i++){
+    numberElement[i].addEventListener("click", function(){
+      if(selectNumber.length<4){
+        if(numberElement[i].classList.contains("active")){
+        numberElement[i].classList.remove("active");
+        selectNumber.splice(selectNumber.indexOf(numberElement[i].textContent),1);
+        showSelectNumber("result",selectNumber);
+        } else {
+            selectNumber.push( numberElement[i].textContent);
+            numberElement[i].classList.add("active");
+            showSelectNumber("result",selectNumber);
+        }
+      } else {
+        if(numberElement[i].classList.contains("active")){
+          numberElement[i].classList.remove("active");
+          selectNumber.splice(selectNumber.indexOf(numberElement[i].textContent),1);
+          showSelectNumber("result",selectNumber);
+        } 
+      }
+      console.log(selectNumber.length);
+
+    });
+
+  }
+}
+function showSelectNumber(id, showList){
+  var resultElement = document.getElementById(id);
+  resultElement.innerHTML="";
+  if(showList.length == 0){
+
+  } else {
+    for(let i =0;i < showList.length;i++){
+      var item = document.createElement("div");
+      item.style.width="25px";
+      item.style.height="25px";
+      item.style.textAlign="center";
+      item.innerText=showList[i];
+      resultElement.appendChild(item);
+    }
+  }
+}
+function randomResult(){
+  listResult=[];
+  if(!isCheat){
+    getNumberWithoutCheat();
+  } else {
+    getNumberCheat();
+  }
+  showSelectNumber("finalResult", listResult);
+}
+function getNumberWithoutCheat(){
+  
+  for(let i=0;i<4;i++){
+    listResult.push(Math.floor(Math.random()*16));
+  }
+
+}
+function getNumberCheat(){
+  listResult=cheatResult.slice();
+}
+</script>
+
+</body>
+</html>
