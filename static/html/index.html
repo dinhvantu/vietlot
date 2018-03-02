@@ -11,8 +11,9 @@
 <div class="w3-content w3-display-container">
   <div class="mySlides">
       <div class='component'>
-          <div class="banner">Quay So Trung Thuong</div>
-          <button class="btnstart" onclick="plusDivs(1)">Bat Dau</button>
+          <div style="float:right;"><button onclick="plusDivs('loginpage')">login</button></div>
+          <div class="banner">bạn có muốn làm giàu không</div>          
+          <button class="btnstart" onclick="plusDivs('start')">Bat Dau</button>
       </div>
       
     </div>
@@ -50,13 +51,13 @@
             <div class="title">cac so da chon</div>
             <div id="result" class="number"></div>
           </div>
-          <button class="" onclick="plusDivs(1)">Mua Ve</button>
+          <button class="" onclick="plusDivs('buyticket')">Mua Ve</button>
       </div>
     </div>
   <div class="mySlides">
       <div class="component">
         <div class="">
-          <button onclick="randomResult()">Quay So</button>
+          <button onclick="randomResult()" id="getnumber">Quay So</button>
             <div>Ket Qua</div>
             <div class="ticket">
                 <div class="title">ve cua ban</div>
@@ -66,13 +67,50 @@
                 <div class="title">ket qua</div>
                 <div id="finalResult" class="number"></div>
             </div>            
-            <div class="prize"></div>
-            <button class="" onclick="plusDivs(1)">&#10095;</button>
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <p>Some text in the Modal..</p>
+                </div>
+              
+            </div>
+            <button class="" onclick="plusDivs('playagain')">choi lai</button>
         </div>
           
       </div>
     </div>
-
+    <div class="mySlides">
+      <div class="component">
+        <div class="login">
+          <label for="uname"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="uname" required id="username">
+    
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required id="password">
+            
+          <button onclick="login()">Login</button>
+    
+        </div>
+      </div>
+    </div>
+    <div class="mySlides">
+      <div class="component">
+        <div class="cheat">
+          <label>gian lan: <input type="checkbox" onclick="cheatEnable()"></label>
+          <div>so ban muon xo</div>
+          <input type="number" id="no1" >
+          <input type="number" id="no2" >
+          <input type="number" id="no3" >
+          <input type="number" id="no4" >
+        </div>
+        <div class="cheatdate">
+          <div>ngay ra so</div>
+          <input type="date" id="calendar" >
+        </div>
+        <button onclick="saveCheat()" id="save">Luu</button>
+        <button onclick="plusDivs('start')">exit</button>
+      </div>
+    </div>
 
 </div>
 
@@ -83,11 +121,41 @@ var selectNumber= [];
 var isCheat=false;
 var listResult=[];
 var cheatResult=[];
+var isGetNumber = false;
+var isLogin = false;
+var cheatDate;
+var modal = document.getElementById('myModal');
+var span = document.getElementsByClassName("close")[0];
 showDivs(slideIndex);
 addEventToTable();
 
+span.onclick= function(){
+  span.style.display='none';
+}
+window.onclick= function(event){
+    modal.style.display ="none";
+  }
+
 function plusDivs(n) {
-  showDivs(slideIndex += n);
+  if(n =='start'){
+    resetGame();
+    showDivs(slideIndex+=1);
+  } else if(n == 'buyticket'){
+    if(selectNumber.length == 4){
+      showDivs(slideIndex+=1);
+    } else {
+      alert('ban phai chon 4 so');
+    }
+  } else if(n == 'playagain'){
+      showDivs(slideIndex=1);
+  } else if(n == 'loginpage'){
+      showDivs(slideIndex=4);
+  } else if(n== 'adminpage'&& isLogin){
+      showDivs(slideIndex=5);
+      loadAdminPage();
+  }
+
+
 }
 
 function showDivs(n) {
@@ -124,7 +192,6 @@ function addEventToTable(){
           showSelectNumber("result",selectNumber);
         } 
       }
-      console.log(selectNumber.length);
 
     });
 
@@ -154,17 +221,151 @@ function randomResult(){
     getNumberCheat();
   }
   showSelectNumber("finalResult", listResult);
+  document.getElementById('getnumber').disabled=true;
+  isGetNumber=true;
+  setTimeout(conpareResult,3000);
+
 }
 function getNumberWithoutCheat(){
   
-  for(let i=0;i<4;i++){
-    listResult.push(Math.floor(Math.random()*16));
+  for(let i=0;;i++){
+    let number =Math.floor(Math.random()*16);
+    if(listResult.indexOf(number) == -1 && number!= 0){
+      listResult.push(number);
+      
+    } 
+    if(listResult.length == 4){
+      break;
+    }
+    
   }
 
 }
 function getNumberCheat(){
   listResult=cheatResult.slice();
 }
+
+function conpareResult(){
+  let count=0;
+  for(let i=0;i<listResult.length ;i++){
+    if(selectNumber.indexOf(listResult[i])!= -1){
+      count++;
+    }
+  }
+  let prize= document.querySelector(".modal-content > p");
+  switch(count){
+    case 0:
+      prize.innerHTML='chuc ban may man lan sau'
+      break;
+    case 1:
+      prize.innerHTML= 'chuc mung ban trung giai 4';
+      break;
+    case 2:
+      prize.innerHTML='chuc mung ban trung giai 3';
+      break;
+    case 3:
+      prize.innerHTML= 'chuc mung ban trung giai 2';
+      break
+    case 4:
+      prize.innerHTML= 'chuc mung ban trung giai 1';
+  }
+  modal.style.display ="block";
+  
+}
+function resetGame(){
+
+  for(let i=0;i < numberElement.length;i++){
+    numberElement[i].classList.remove("active");
+  }
+  listResult =[];
+  selectNumber =[];
+  isGetNumber= false;
+  document.getElementById('getnumber').disabled=false;
+}
+function login(){
+    let username=document.getElementById('username').value;
+    let password = document.getElementById('password').value;
+    if(username == 'admin' && password =='admin'){
+      isLogin= true;
+      plusDivs('adminpage');
+    }
+  }
+  function cheatEnable(){
+    isCheat = isCheat?false:true;
+    let no1= document.getElementById('no1');
+    let no2= document.getElementById('no2');
+    let no3= document.getElementById('no3');
+    let no4= document.getElementById('no4');
+    let calenar = document.getElementById('calendar');
+    let save= document.getElementById('save')
+    if(isCheat){
+      no1.disabled=false;
+      no2.disabled=false;
+      no3.disabled=false;
+      no4.disabled=false;
+      calenar.disabled=false;
+      save.disabled=false;
+    } else{
+      no1.disabled=true;
+      no2.disabled=true;
+      no3.disabled=true;
+      no4.disabled=true;
+      calenar.disabled=true;
+      save.disabled=true;
+    }
+  }
+  function loadAdminPage(){
+    let no1= document.getElementById('no1');
+    let no2= document.getElementById('no2');
+    let no3= document.getElementById('no3');
+    let no4= document.getElementById('no4');
+    let calenar = document.getElementById('calendar');
+    if(isCheat){
+      no1.disabled=false;
+      no2.disabled=false;
+      no3.disabled=false;
+      no4.disabled=false;
+      calenar.disabled=false;
+      save.disabled=false
+      no1.value=cheatResult[0];
+      no2.value=cheatResult[1];
+      no3.value=cheatResult[2];
+      no4.value=cheatResult[3];
+      calenar.value=cheatDate;
+    } else {
+      no1.disabled=true;
+      no2.disabled=true;
+      no3.disabled=true;
+      no4.disabled=true;
+      calenar.disabled=true;
+      save.disabled=true;
+    }
+  }
+  function saveCheat(){
+    let no1= validateNumber(document.getElementById('no1').value);
+    let no2= validateNumber(document.getElementById('no2').value);
+    let no3= validateNumber(document.getElementById('no3').value);
+    let no4= validateNumber(document.getElementById('no4').value);
+    let calenar = document.getElementById('calendar').value;
+    if(no1 == -1 || no2 == -1 ||no3 == -1 ||no4 == -1 || calenar == ""){
+      alert('dien day du thong tin ||  0 < giatri < 17');
+    }else if(isCheat){
+      cheatResult[0]= no1;
+      cheatResult[1]= no2;
+      cheatResult[2]= no3;
+      cheatResult[3]= no4;
+      cheatDate=calenar;
+    }
+  }
+  function validateNumber(n){
+    n= Number(n);
+    if(n>0 && n<=16)
+      return n;
+    else 
+      return -1;
+  }
+
+
 </script>
 
 </body>
