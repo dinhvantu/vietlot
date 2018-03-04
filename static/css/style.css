@@ -1,6 +1,6 @@
 .component{
-    background:url(/background.png);
-    background-repeat: repeat;
+    background:url(/background.jpg);
+    background-size: contain;
     width: 700px;
     height: 700px;
     margin: 0 auto;
@@ -35,9 +35,24 @@ td:hover{
 .active{
     background-color: blue;
 }
-#result{
-  
+.textbox{
+    width: 30px;
 }
+.cheat, .cheatdate{
+    border: 1px solid black;
+    margin: 0 auto;
+    width: 400px;
+    margin-bottom: 5px;
+    height: 50px;
+}
+.cheat > .sublabel, .cheatdate > .sublabel{
+    border-bottom: 2px solid black;
+    margin-bottom: 5px;
+    padding-left: 3px;
+    opacity: 0.5;
+    color: gray;
+}
+
 
 @keyframes example {
     from {
@@ -84,6 +99,18 @@ td:hover{
 .btnstart:hover{
     
     transform: scale(1.15, 1.15);
+}
+.btn{
+    background-color: #4CAF50; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
 }
 .w3-content{
     margin: auto;

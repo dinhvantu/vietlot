@@ -5,9 +5,6 @@
 
 <link rel="stylesheet" href="style.css"/>
 <body>
-
-<h2 class="w3-center">Manual Slideshow</h2>
-
 <div class="w3-content w3-display-container">
   <div class="mySlides">
       <div class='component'>
@@ -51,13 +48,13 @@
             <div class="title">cac so da chon</div>
             <div id="result" class="number"></div>
           </div>
-          <button class="" onclick="plusDivs('buyticket')">Mua Ve</button>
+         <div><button class="btn" onclick="plusDivs('buyticket')">Mua Ve</button></div> 
       </div>
     </div>
   <div class="mySlides">
       <div class="component">
         <div class="">
-          <button onclick="randomResult()" id="getnumber">Quay So</button>
+          <button class="btn" onclick="randomResult()" id="getnumber">Quay So</button>
             <div>Ket Qua</div>
             <div class="ticket">
                 <div class="title">ve cua ban</div>
@@ -74,7 +71,7 @@
                 </div>
               
             </div>
-            <button class="" onclick="plusDivs('playagain')">choi lai</button>
+           <div><button class="btn" onclick="plusDivs('playagain')">choi lai</button></div> 
         </div>
           
       </div>
@@ -88,27 +85,27 @@
           <label for="psw"><b>Password</b></label>
           <input type="password" placeholder="Enter Password" name="psw" required id="password">
             
-          <button onclick="login()">Login</button>
+          <button class="btn" onclick="login()">Login</button>
     
         </div>
       </div>
     </div>
     <div class="mySlides">
       <div class="component">
-        <div class="cheat">
-          <label>gian lan: <input type="checkbox" onclick="cheatEnable()"></label>
-          <div>so ban muon xo</div>
-          <input type="number" id="no1" >
-          <input type="number" id="no2" >
-          <input type="number" id="no3" >
-          <input type="number" id="no4" >
+        <label>gian lan: <input type="checkbox" onclick="cheatEnable()"></label>
+        <div class="cheat">         
+          <div class="sublabel">so ban muon xo</div>
+          <input type="number" id="no1" class="textbox">
+          <input type="number" id="no2" class="textbox">
+          <input type="number" id="no3" class="textbox">
+          <input type="number" id="no4" class="textbox">
         </div>
         <div class="cheatdate">
-          <div>ngay ra so</div>
+          <div class="sublabel">ngay ra so</div>
           <input type="date" id="calendar" >
         </div>
-        <button onclick="saveCheat()" id="save">Luu</button>
-        <button onclick="plusDivs('start')">exit</button>
+        <button class="btn" onclick="saveCheat()" id="save">Luu</button>
+        <button class="btn" onclick="plusDivs('start')">exit</button>
       </div>
     </div>
 
@@ -147,6 +144,7 @@ function plusDivs(n) {
       alert('ban phai chon 4 so');
     }
   } else if(n == 'playagain'){
+      resetGame();
       showDivs(slideIndex=1);
   } else if(n == 'loginpage'){
       showDivs(slideIndex=4);
@@ -215,10 +213,11 @@ function showSelectNumber(id, showList){
 }
 function randomResult(){
   listResult=[];
-  if(!isCheat){
-    getNumberWithoutCheat();
-  } else {
+  let currenDate = getCurrentDate();
+  if(isCheat && cheatDate == currenDate){   
     getNumberCheat();
+  } else {
+    getNumberWithoutCheat();
   }
   showSelectNumber("finalResult", listResult);
   document.getElementById('getnumber').disabled=true;
@@ -281,6 +280,7 @@ function resetGame(){
   selectNumber =[];
   isGetNumber= false;
   document.getElementById('getnumber').disabled=false;
+  document.getElementById('finalResult').innerHTML="";
 }
 function login(){
     let username=document.getElementById('username').value;
@@ -364,7 +364,22 @@ function login(){
     else 
       return -1;
   }
+function getCurrentDate(){
+  var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+var yyyy = today.getFullYear();
 
+if(dd<10) {
+    dd = '0'+dd
+} 
+
+if(mm<10) {
+    mm = '0'+mm
+} 
+
+return today = yyyy + '-' + mm + '-' + dd;
+}
 
 </script>
 
