@@ -1,5 +1,5 @@
 .component{
-    background:url(/background.jpg);
+    background:url(../images/background.jpg);
     background-size: contain;
     width: 700px;
     height: 700px;
